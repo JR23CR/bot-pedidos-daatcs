@@ -1,220 +1,443 @@
 #!/bin/bash
 
-# Script de instalación para Bot Pedidos DAATCS en Termux
-echo "🤖 Instalando Bot de Pedidos DAATCS para Termux..."
+# 🎨 DAATCS STUDIOS - Instalador Automático Bot de Sublimaciones
+# Instalador especializado para WhatsApp
 
-# Actualizar paquetes de Termux
-echo "📦 Actualizando paquetes de Termux..."
-pkg update -y && pkg upgrade -y
+echo "🎨 DAATCS STUDIOS - Bot de Sublimaciones"
+echo "======================================"
+echo "✨ Especialistas en sublimaciones de alta calidad"
+echo "📱 Bot exclusivo para grupo PEDIDOS DAATCS"
+echo ""
 
-# Instalar Node.js y npm
-echo "📦 Instalando Node.js y npm..."
-pkg install nodejs npm git -y
+# Colores para output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+NC='\033[0m' # No Color
 
-# Verificar instalación
-echo "🔍 Verificando instalaciones..."
-node --version
-npm --version
-git --version
+show_message() {
+    echo -e "${GREEN}[DAATCS]${NC} $1"
+}
 
-# Crear directorio del bot
-echo "📁 Creando estructura de directorios..."
-mkdir -p ~/bot-pedidos-daatcs
-cd ~/bot-pedidos-daatcs
+show_warning() {
+    echo -e "${YELLOW}[AVISO]${NC} $1"
+}
 
-# Crear directorios necesarios
-mkdir -p data auth logs
+show_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
 
-# Inicializar npm y instalar dependencias
-echo "📦 Instalando dependencias de Node.js..."
-npm init -y
-npm install @whiskeysockets/baileys@^6.5.0 @hapi/boom@^10.0.1 pino@^8.15.0 qrcode-terminal@^0.12.0
+show_step() {
+    echo -e "${BLUE}[PASO]${NC} $1"
+}
 
-# Crear archivo .gitignore
-echo "📝 Creando archivo .gitignore..."
-cat > .gitignore << EOL
-# Dependencias
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+show_daatcs() {
+    echo -e "${PURPLE}[DAATCS STUDIOS]${NC} $1"
+}
 
-# Archivos de autenticación de WhatsApp
-auth/
-*.session.json
+# Banner DAATCS
+show_banner() {
+    echo -e "${PURPLE}"
+    echo "  ██████╗  ██████╗  █████╗ ████████╗ ██████╗███████╗"
+    echo "  ██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔════╝"
+    echo "  ██║  ██║██████╔╝███████║   ██║   ██║     ███████╗"
+    echo "  ██║  ██║██╔══██╗██╔══██║   ██║   ██║     ╚════██║"
+    echo "  ██████╔╝██║  ██║██║  ██║   ██║   ╚██████╗███████║"
+    echo "  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚══════╝"
+    echo -e "${NC}"
+    echo "           🎨 STUDIOS - Sublimaciones Premium 🎨"
+    echo ""
+}
 
-# Datos locales
-data/
-*.json
+# Verificar entorno
+check_environment() {
+    if [[ -n "$TERMUX_VERSION" ]]; then
+        show_message "Detectado Termux - Perfecto para DAATCS Bot"
+        ENV="termux"
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        show_message "Detectado Linux"
+        ENV="linux"
+    else
+        show_warning "Entorno no completamente compatible"
+        ENV="unknown"
+    fi
+}
 
-# Logs
-logs/
-*.log
+# Instalar dependencias
+install_dependencies() {
+    show_step "Instalando dependencias para DAATCS Studios..."
+    
+    if [[ "$ENV" == "termux" ]]; then
+        show_daatcs "Configurando Termux para sublimaciones..."
+        termux-setup-storage
+        
+        show_message "Actualizando sistema..."
+        apt update -y && yes | apt upgrade
+        
+        show_message "Instalando herramientas DAATCS..."
+        pkg install -y bash wget git nodejs ffmpeg imagemagick yarn python
+        
+    elif [[ "$ENV" == "linux" ]]; then
+        show_message "Configurando Linux..."
+        sudo apt update && sudo apt upgrade -y
+        sudo apt install -y curl git nodejs npm ffmpeg imagemagick python3 build-essential
+        
+        if ! command -v yarn &> /dev/null; then
+            show_message "Instalando Yarn..."
+            npm install -g yarn
+        fi
+    fi
+}
 
-# Archivos temporales
-.tmp/
-temp/
+# Crear estructura DAATCS
+create_daatcs_structure() {
+    show_step "Creando estructura DAATCS Studios..."
+    
+    mkdir -p daatcs-bot/{data,respaldos,logs,productos,diseños}
+    cd daatcs-bot
+    
+    show_daatcs "Estructura creada para sublimaciones"
+}
 
-# Archivos del sistema
-.DS_Store
-Thumbs.db
+# Crear archivos DAATCS
+create_daatcs_files() {
+    show_step "Creando archivos DAATCS Studios..."
+    
+    # package.json específico DAATCS
+    cat > package.json << 'EOF'
+{
+  "name": "daatcs-studios-bot",
+  "version": "2.0.0",
+  "description": "Bot WhatsApp especializado para DAATCS Studios - Sublimaciones",
+  "main": "index.js",
+  "author": "DAATCS Studios",
+  "license": "MIT",
+  "keywords": [
+    "whatsapp", "bot", "sublimacion", "daatcs", "estampados", "personalizacion"
+  ],
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "daatcs": "node index.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.5.0",
+    "pino": "^8.15.0",
+    "qrcode-terminal": "^0.12.0"
+  }
+}
+EOF
 
-# Variables de entorno
-.env
-.env.local
-.env.production
+    # Configuración DAATCS
+    cat > config.js << 'EOF'
+// Configuración DAATCS STUDIOS
+const config = {
+  empresa: {
+    nombre: 'DAATCS STUDIOS',
+    tipo: 'Sublimaciones y Estampados Personalizados',
+    telefono: '+57 XXX XXX XXXX', // ⚠️ ACTUALIZAR CON NÚMERO REAL
+    email: 'pedidos@daatcsstudios.com',
+    ubicacion: 'Colombia',
+    web: 'www.daatcsstudios.com'
+  },
 
-# Cache
-.cache/
-EOL
-
-# Crear archivo de configuración
-echo "⚙️ Creando archivo de configuración..."
-cat > config.js << EOL
-module.exports = {
-    groupName: 'PEDIDOS DAATCS',
-    adminNumbers: [
-        // Agregar números de admin aquí (formato: '521234567890')
-        // Ejemplo: '5215551234567'
-    ],
-    pedidosFile: './data/pedidos.json',
-    clientesFile: './data/clientes.json',
-    logFile: './logs/bot.log'
+  // ⚠️ IMPORTANTE: Agregar números de administradores DAATCS
+  admins: [
+    '573123456789' // Reemplazar con número real sin +
+  ],
+  
+  botName: '🎨 DAATCS STUDIOS Bot',
+  prefix: '.',
+  grupoAutorizado: 'PEDIDOS DAATCS',
+  
+  // Estados específicos de sublimación
+  estadosPedido: {
+    borrador: '📝 En construcción',
+    confirmado: '✅ Confirmado',
+    diseñando: '🎨 Creando diseño',
+    procesando: '⚙️ En producción', 
+    sublimando: '🔥 Sublimando',
+    control_calidad: '🔍 Control de calidad',
+    listo: '📦 Listo para entrega',
+    enviado: '🚚 Enviado',
+    entregado: '✅ Entregado',
+    cancelado: '❌ Cancelado'
+  }
 };
-EOL
 
-# Crear script de inicio
-echo "🚀 Creando scripts de inicio..."
-cat > start.sh << EOL
+module.exports = config;
+EOF
+
+    # README específico DAATCS
+    cat > README.md << 'EOF'
+# 🎨 DAATCS STUDIOS - Bot de Sublimaciones
+
+Bot especializado para DAATCS Studios, empresa líder en sublimaciones.
+
+## 🚀 Inicio Rápido
+
+1. Configura tu número admin en `config.js`
+2. Ejecuta: `npm start`  
+3. Escanea QR con WhatsApp
+4. Úsalo solo en grupo "PEDIDOS DAATCS"
+
+## 📞 Contacto DAATCS
+
+- WhatsApp: +57 XXX XXX XXXX
+- Email: pedidos@daatcsstudios.com
+- Web: www.daatcsstudios.com
+
+🎨 ¡Sublimaciones de alta calidad!
+EOF
+
+    # .gitignore
+    cat > .gitignore << 'EOF'
+node_modules/
+auth/
+*.log
+data/*.json
+respaldos/
+diseños/
+productos/temp/
+.env
+.DS_Store
+EOF
+
+    show_daatcs "Archivos base creados correctamente"
+}
+
+# Instalar dependencias Node.js
+install_node_dependencies() {
+    show_step "Instalando dependencias Node.js para DAATCS..."
+    
+    if command -v yarn &> /dev/null; then
+        show_message "Instalando con Yarn..."
+        yarn install
+    else
+        show_message "Instalando con NPM..."
+        npm install
+    fi
+    
+    show_daatcs "Dependencias instaladas correctamente"
+}
+
+# Configurar PM2 para DAATCS
+setup_daatcs_pm2() {
+    show_step "Configurando PM2 para DAATCS Studios..."
+    
+    if [[ "$ENV" == "termux" ]]; then
+        termux-wake-lock
+        show_message "Wake lock activado en Termux"
+    fi
+    
+    npm install -g pm2
+    
+    # Configuración PM2 específica DAATCS
+    cat > ecosystem.config.js << 'EOF'
+module.exports = {
+  apps: [{
+    name: 'daatcs-bot',
+    script: 'index.js',
+    instances: 1,
+    autorestart: true,
+    watch: false,
+    max_memory_restart: '1G',
+    env: {
+      NODE_ENV: 'production',
+      EMPRESA: 'DAATCS_STUDIOS'
+    },
+    error_file: './logs/daatcs-error.log',
+    out_file: './logs/daatcs-out.log',
+    log_file: './logs/daatcs-combined.log'
+  }]
+};
+EOF
+    
+    show_daatcs "PM2 configurado para sublimaciones"
+}
+
+# Scripts específicos DAATCS
+create_daatcs_scripts() {
+    show_step "Creando scripts DAATCS Studios..."
+    
+    # Script iniciar DAATCS
+    cat > start-daatcs.sh << 'EOF'
 #!/bin/bash
-echo "🤖 Iniciando Bot de Pedidos DAATCS..."
-cd ~/bot-pedidos-daatcs
-node bot.js
-EOL
+echo "🎨 Iniciando DAATCS STUDIOS Bot..."
+echo "✨ Especialistas en sublimaciones"
+pm2 start ecosystem.config.js
+pm2 save
+echo "✅ Bot DAATCS iniciado correctamente"
+echo "📱 Escanea el código QR con WhatsApp"
+echo "🔗 Úsalo solo en grupo 'PEDIDOS DAATCS'"
+pm2 logs daatcs-bot
+EOF
 
-chmod +x start.sh
-
-# Crear script de reinicio automático
-cat > auto-restart.sh << EOL
+    # Script detener DAATCS
+    cat > stop-daatcs.sh << 'EOF'
 #!/bin/bash
-echo "🔄 Iniciando Bot con reinicio automático..."
-cd ~/bot-pedidos-daatcs
-while true; do
-    echo "🚀 Iniciando bot..."
-    node bot.js
-    echo "⚠️ Bot se detuvo. Reiniciando en 5 segundos..."
-    sleep 5
-done
-EOL
+echo "🛑 Deteniendo DAATCS Studios Bot..."
+pm2 stop daatcs-bot
+pm2 delete daatcs-bot
+echo "✅ Bot DAATCS detenido correctamente"
+EOF
 
-chmod +x auto-restart.sh
-
-# Crear archivo README con instrucciones
-echo "📖 Creando documentación..."
-cat > README.md << EOL
-# Bot de Pedidos DAATCS 🤖
-
-Bot de WhatsApp para gestionar pedidos de sublimaciones que funciona exclusivamente en el grupo "PEDIDOS DAATCS".
-
-## 📋 Características
-
-- ✅ Registro automático de pedidos
-- 📊 Seguimiento de estados
-- 👥 Gestión de clientes
-- 📈 Estadísticas de ventas
-- 🔐 Comandos de administrador
-- 💾 Persistencia de datos
-
-## 🚀 Instalación en Termux
-
-1. Ejecuta el script de instalación:
-   \`\`\`bash
-   bash install.sh
-   \`\`\`
-
-2. Configura números de administrador en \`config.js\`
-
-3. Inicia el bot:
-   \`\`\`bash
-   ./start.sh
-   \`\`\`
-
-## 📱 Comandos Disponibles
-
-### Para todos los usuarios:
-- \`!ayuda\` - Mostrar ayuda
-- \`!mispedidos\` - Ver mis pedidos
-- \`!estado [ID]\` - Consultar estado de pedido
-
-### Para administradores:
-- \`!admin\` - Ver comandos de admin
-- \`!listapedidos\` - Ver todos los pedidos
-- \`!cambiarestado [ID] [estado]\` - Cambiar estado
-- \`!estadisticas\` - Ver estadísticas
-- \`!buscarpedido [ID]\` - Buscar pedido específico
-
-## 📝 Formato de Pedido
-
-\`\`\`
-Cliente: Nombre del cliente
-Teléfono: Número de contacto
-Producto: Nombre del producto
-Cantidad: Número de piezas
-Precio: Costo por pieza
-Nota: Observaciones adicionales
-\`\`\`
-
-## 🔧 Configuración
-
-Edita el archivo \`config.js\` para:
-- Agregar números de administrador
-- Cambiar rutas de archivos
-- Personalizar configuraciones
-
-## 📂 Estructura de Archivos
-
-\`\`\`
-bot-pedidos-daatcs/
-├── bot.js              # Archivo principal del bot
-├── config.js           # Configuración
-├── package.json        # Dependencias
-├── start.sh           # Script de inicio
-├── auto-restart.sh    # Script con reinicio automático
-├── data/              # Datos persistentes
-│   ├── pedidos.json   # Pedidos guardados
-│   └── clientes.json  # Información de clientes
-├── auth/              # Autenticación WhatsApp
-└── logs/              # Archivos de log
-\`\`\`
-
-## 🛠️ Mantenimiento
-
-- **Iniciar bot**: \`./start.sh\`
-- **Con reinicio automático**: \`./auto-restart.sh\`
-- **Ver logs**: \`tail -f logs/bot.log\`
-- **Backup datos**: Copia la carpeta \`data/\`
-
-## 🔒 Seguridad
-
-- Solo funciona en el grupo "PEDIDOS DAATCS"
-- Comandos de admin restringidos
-- Datos guardados localmente
-- Autenticación por QR
-
-## 📞 Soporte
-
-Para soporte técnico, contacta al administrador del sistema.
-EOL
-
-echo "✅ Instalación completada!"
+    # Script status DAATCS
+    cat > status-daatcs.sh << 'EOF'
+#!/bin/bash
+echo "📊 Estado DAATCS Studios Bot:"
+echo "==============================="
+pm2 list
 echo ""
-echo "🔧 CONFIGURACIÓN REQUERIDA:"
-echo "1. Edita config.js y agrega los números de administrador"
-echo "2. Ejecuta: ./start.sh para iniciar el bot"
-echo "3. Escanea el código QR con WhatsApp"
-echo ""
-echo "📁 Directorio del bot: ~/bot-pedidos-daatcs"
-echo "📖 Lee README.md para más información"
-echo ""
-echo "🚀 Para iniciar el bot ejecuta:"
-echo "   cd ~/bot-pedidos-daatcs && ./start.sh"
+echo "📋 Logs recientes:"
+pm2 logs daatcs-bot --lines 10
+EOF
+
+    # Script respaldo DAATCS
+    cat > backup-daatcs.sh << 'EOF'
+#!/bin/bash
+fecha=$(date +%Y%m%d_%H%M%S)
+echo "💾 Creando respaldo DAATCS Studios: $fecha"
+mkdir -p "respaldos/daatcs_backup_$fecha"
+cp -r data/ "respaldos/daatcs_backup_$fecha/"
+cp -r productos/ "respaldos/daatcs_backup_$fecha/" 2>/dev/null || true
+cp -r diseños/ "respaldos/daatcs_backup_$fecha/" 2>/dev/null || true
+echo "✅ Respaldo DAATCS creado en respaldos/daatcs_backup_$fecha"
+EOF
+
+    # Script actualizar DAATCS
+    cat > update-daatcs.sh << 'EOF'
+#!/bin/bash
+echo "🔄 Actualizando DAATCS Studios Bot..."
+./backup-daatcs.sh
+git pull origin main
+npm install
+pm2 restart daatcs-bot
+echo "✅ DAATCS Bot actualizado correctamente"
+EOF
+
+    # Hacer ejecutables
+    chmod +x *.sh
+    
+    show_daatcs "Scripts DAATCS creados y configurados"
+}
+
+# Crear estructura de productos DAATCS
+create_products_structure() {
+    show_step "Creando catálogo de productos DAATCS..."
+    
+    mkdir -p productos/{textiles,mugs,termos,cojines,accesorios,personalizados}
+    mkdir -p diseños/{templates,logos,trabajos}
+    
+    # Crear productos predefinidos
+    cat > data/productos-base.json << 'EOF'
+{
+  "SUB-001": {
+    "id": "SUB-001",
+    "categoria": "textil",
+    "nombre": "Camiseta Básica Sublimable",
+    "precio": 25000,
+    "descripcion": "Camiseta 100% poliéster, ideal para sublimación",
+    "disponible": true,
+    "tiempoProduccion": "3-4 días hábiles"
+  },
+  "SUB-002": {
+    "id": "SUB-002", 
+    "categoria": "mug",
+    "nombre": "Mug Cerámico 11oz",
+    "precio": 12000,
+    "descripcion": "Mug cerámico blanco sublimable",
+    "disponible": true,
+    "tiempoProduccion": "2-3 días hábiles"
+  },
+  "SUB-003": {
+    "id": "SUB-003",
+    "categoria": "termo",
+    "nombre": "Termo Acero Inoxidable 500ml",
+    "precio": 35000,
+    "descripcion": "Termo sublimable mantiene temperatura 12h",
+    "disponible": true,
+    "tiempoProduccion": "3-4 días hábiles"
+  }
+}
+EOF
+    
+    show_daatcs "Catálogo base de sublimaciones creado"
+}
+
+# Instrucciones finales DAATCS
+show_daatcs_instructions() {
+    show_banner
+    
+    echo -e "${GREEN}🎉 ¡Instalación DAATCS STUDIOS completada!${NC}"
+    echo "=============================================="
+    echo ""
+    
+    show_daatcs "CONFIGURACIÓN FINAL:"
+    echo "1️⃣  Edita config.js y agrega tu número de administrador:"
+    echo "   nano config.js"
+    echo ""
+    echo "2️⃣  Actualiza información de contacto DAATCS"
+    echo "3️⃣  Inicia el bot:"
+    echo "   ./start-daatcs.sh"
+    echo ""
+    echo "4️⃣  Escanea el código QR con WhatsApp"
+    echo "5️⃣  Agrégalo al grupo 'PEDIDOS DAATCS'"
+    echo ""
+    
+    show_step "COMANDOS DAATCS DISPONIBLES:"
+    echo "• ./start-daatcs.sh     - Iniciar bot sublimaciones"
+    echo "• ./stop-daatcs.sh      - Detener bot"
+    echo "• ./status-daatcs.sh    - Ver estado del bot"
+    echo "• ./backup-daatcs.sh    - Crear respaldo"
+    echo "• ./update-daatcs.sh    - Actualizar bot"
+    echo ""
+    
+    show_daatcs "COMANDOS DEL BOT (en WhatsApp):"
+    echo "📋 .menu - Ver menú completo"
+    echo "🎨 .productos - Catálogo de sublimaciones"  
+    echo "☕ .mugs - Ver mugs disponibles"
+    echo "👕 .textiles - Ver ropa sublimable"
+    echo "📞 .contacto - Información DAATCS"
+    echo "⏰ .tiempos - Tiempos de entrega"
+    echo "🛍️ .nuevopedido - Crear pedido"
+    echo ""
+    
+    show_warning "IMPORTANTE:"
+    echo "• Configura tu número de admin en config.js"
+    echo "• El bot SOLO funciona en grupo 'PEDIDOS DAATCS'" 
+    echo "• Actualiza datos de contacto reales"
+    echo "• Mantén respaldos regulares"
+    echo ""
+    
+    show_daatcs "SOPORTE TÉCNICO:"
+    echo "📱 WhatsApp: +57 XXX XXX XXXX"
+    echo "📧 Email: soporte@daatcsstudios.com"
+    echo "🌐 Web: www.daatcsstudios.com"
+    echo ""
+    
+    echo -e "${PURPLE}🎨 ¡DAATCS STUDIOS - Sublimaciones de Alta Calidad! ✨${NC}"
+    echo -e "${GREEN}¡Tu bot especializado está listo para usar!${NC}"
+}
+
+# Función principal
+main() {
+    show_banner
+    check_environment
+    install_dependencies
+    create_daatcs_structure
+    create_daatcs_files
+    install_node_dependencies
+    setup_daatcs_pm2
+    create_daatcs_scripts
+    create_products_structure
+    show_daatcs_instructions
+}
+
+# Ejecutar con manejo de errores
+set -e
+trap 'show_error "Error en la instalación DAATCS en línea $LINENO"' ERR
+
+main "$@"
