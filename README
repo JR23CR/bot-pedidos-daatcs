@@ -1,230 +1,508 @@
-# 🤖 Bot de Pedidos DAATCS
+# 🎨 DAATCS STUDIOS - Bot de Sublimaciones
 
-Bot de WhatsApp especializado para gestión de pedidos de sublimaciones que funciona exclusivamente en el grupo "PEDIDOS DAATCS".
+Bot especializado para **DAATCS STUDIOS**, empresa de sublimaciones y estampados personalizados. Funciona exclusivamente en el grupo "PEDIDOS DAATCS" de WhatsApp.
 
-## 🌟 Características Principales
+## 🌟 Sobre DAATCS Studios
 
-- ✅ **Registro automático de pedidos** con formato inteligente
-- 📊 **Seguimiento de estados** en tiempo real
-- 👥 **Gestión completa de clientes** con historial
-- 📈 **Estadísticas y reportes** detallados
-- 🔐 **Sistema de permisos** para administradores
-- 💾 **Persistencia de datos** con backup automático
-- 🎨 **Interfaz amigable** con emojis y formato claro
-- ⏰ **Notificaciones automáticas** y recordatorios
-- 📱 **Optimizado para Termux** en Android
+**DAATCS STUDIOS** es una empresa especializada en:
+- 🎨 Sublimaciones de alta calidad
+- 👕 Estampados en textiles
+- ☕ Personalización de mugs y termos
+- 🛏️ Cojines y productos decorativos
+- 🖱️ Accesorios personalizados
+- 🎯 Productos promocionales
 
-## 🚀 Instalación Rápida en Termux
+## 📋 Características del Bot
 
-### Método 1: Instalación Automática
+- ✅ **Catálogo Completo**: Productos predefinidos de sublimación
+- 🛒 **Sistema de Pedidos**: Gestión completa desde creación hasta entrega
+- 👥 **Registro de Clientes**: Base de datos integrada
+- 🎨 **Estados Específicos**: Desde diseño hasta entrega
+- 📊 **Reportes de Ventas**: Estadísticas detalladas
+- 🔐 **Solo Grupo Autorizado**: Funciona únicamente en "PEDIDOS DAATCS"
+- 💾 **Respaldos Automáticos**: Seguridad de datos garantizada
+
+## 🚀 Instalación Rápida
+
+### Termux (Android) - Recomendado
 
 ```bash
-# Descargar e instalar automáticamente
-curl -sSL https://raw.githubusercontent.com/tu-usuario/bot-pedidos-daatcs/main/install.sh | bash
-```
-
-### Método 2: Instalación Manual
-
-```bash
-# Actualizar Termux
-pkg update -y && pkg upgrade -y
+# Preparar sistema
+termux-setup-storage
+apt update -y && apt upgrade -y
 
 # Instalar dependencias
-pkg install nodejs npm git -y
+pkg install -y git nodejs yarn ffmpeg imagemagick
 
-# Clonar el repositorio
-git clone https://github.com/tu-usuario/bot-pedidos-daatcs.git
-cd bot-pedidos-daatcs
+# Clonar e instalar
+git clone https://github.com/TU-USUARIO/daatcs-bot
+cd daatcs-bot
+yarn install
+npm start
+```
 
-# Instalar dependencias de Node.js
+### Manual
+
+```bash
+# 1. Clonar repositorio
+git clone https://github.com/TU-USUARIO/daatcs-bot
+cd daatcs-bot
+
+# 2. Instalar dependencias
 npm install
 
-# Configurar el bot
-cp config.example.js config.js
-nano config.js  # Editar configuración
+# 3. Configurar admins en config.js
+nano config.js
 
-# Ejecutar
-node start.js
+# 4. Iniciar bot
+npm start
 ```
+
+## ⚙️ Configuración DAATCS
+
+### 1. Configurar Administradores
+
+Edita `config.js` y agrega los números de teléfono de los administradores de DAATCS Studios:
+
+```javascript
+admins: [
+  '573XXXXXXXXX', // Número admin principal DAATCS
+  '573YYYYYYYYY'  // Número admin secundario
+],
+```
+
+### 2. Información de la Empresa
+
+Actualiza los datos en `config.js`:
+
+```javascript
+empresa: {
+  telefono: '+57 XXX XXX XXXX', // Teléfono real DAATCS
+  email: 'pedidos@daatcsstudios.com',
+  ubicacion: 'Tu ciudad, Colombia',
+  web: 'www.daatcsstudios.com'
+}
+```
+
+### 3. Configurar Grupo Autorizado
+
+El bot se activa automáticamente cuando detecta un grupo llamado **"PEDIDOS DAATCS"**.
+
+## 📱 Comandos para Clientes
+
+| Comando | Descripción | Ejemplo |
+|---------|-------------|---------|
+| `.menu` | Ver menú completo | `.menu` |
+| `.productos` | Catálogo de productos | `.productos` |
+| `.buscar [término]` | Buscar productos | `.buscar mug` |
+| `.contacto` | Información de DAATCS | `.contacto` |
+| `.materiales` | Tipos de materiales | `.materiales` |
+| `.tiempos` | Tiempos de entrega | `.tiempos` |
+| `.registrarme` | Registrarse como cliente | `.registrarme Juan 300123456 Cra 10 #20-30` |
+| `.nuevopedido` | Crear pedido | `.nuevopedido` |
+| `.agregar` | Agregar al carrito | `.agregar SUB-004 2 Logo empresa` |
+| `.mispedidos` | Ver mis pedidos | `.mispedidos` |
+| `.confirmar [id]` | Confirmar pedido | `.confirmar PED-123` |
+
+## 🔧 Comandos para Administradores DAATCS
+
+| Comando | Descripción | Ejemplo |
+|---------|-------------|---------|
+| `.agregarproducto` | Agregar producto | `.agregarproducto mug "Mug Premium" 15000 "Descripción"` |
+| `.todospedidos` | Ver todos los pedidos | `.todospedidos` |
+| `.cambiarestado` | Cambiar estado | `.cambiarestado PED-123 sublimando` |
+| `.estadisticas` | Reportes de ventas | `.estadisticas` |
+| `.reporte [periodo]` | Reporte detallado | `.reporte mes` |
+| `.notificar` | Notificar clientes | `.notificar Nueva oferta disponible` |
+
+## 🎨 Categorías de Productos
+
+### 👕 Textiles
+- Camisetas sublimables
+- Hoodies y sudaderas  
+- Gorras personalizadas
+- Uniformes deportivos
+
+### ☕ Mugs y Termos
+- Mugs cerámicos 11oz y 15oz
+- Mugs mágicos (cambian color)
+- Termos acero inoxidable
+- Vasos sublimables
+
+### 🛏️ Decoración
+- Cojines 40x40cm
+- Almohadas rectangulares
+- Cuadros en MDF
+- Platos decorativos
+
+### 🖱️ Accesorios
+- Mouse pads estándar
+- Mouse pads XXL gaming
+- Portavasos
+- Llaveros sublimables
+
+## 📊 Estados de Pedidos DAATCS
+
+1. **📝 En construcción** - Cliente armando pedido
+2. **✅ Confirmado** - Pedido listo para procesar
+3. **🎨 Creando diseño** - Elaborando arte final
+4. **⚙️ En producción** - Preparando materiales
+5. **🔥 Sublimando** - Proceso de sublimación
+6. **🔍 Control de calidad** - Verificación final
+7. **📦 Listo para entrega** - Producto terminado
+8. **🚚 Enviado** - En camino al cliente
+9. **✅ Entregado** - Proceso completado
+
+## ⏰ Tiempos de Entrega DAATCS
+
+### Productos Estándar
+- **Mugs y termos**: 2-3 días hábiles
+- **Camisetas (1-5 pzas)**: 3-4 días hábiles
+- **Cojines**: 2-3 días hábiles
+- **Mouse pads**: 1-2 días hábiles
+
+### Pedidos Grandes
+- **6-20 piezas**: 5-7 días hábiles
+- **21-50 piezas**: 7-10 días hábiles
+- **+50 piezas**: 10-15 días hábiles
+
+### Con Diseño Personalizado
+- **Diseño incluido**: +1-2 días
+- **Diseños complejos**: +2-3 días
+
+## 🚚 Opciones de Entrega
+
+- **🏪 Recogida en tienda**: Sin costo
+- **🏠 Domicilio local**: $5,000 - $10,000
+- **📦 Envío nacional**: $15,000 - $25,000
+
+## 💻 Mantenimiento del Bot
+
+### Mantener Activo con PM2
+
+```bash
+# Instalar PM2
+npm install -g pm2
+
+# Iniciar bot
+pm2 start index.js --name "daatcs-bot"
+pm2 save
+
+# Comandos útiles
+pm2 logs daatcs-bot    # Ver logs
+pm2 restart daatcs-bot # Reiniciar
+pm2 stop daatcs-bot    # Detener
+```
+
+### Respaldos Automáticos
+
+```bash
+# Crear respaldo manual
+./backup.sh
+
+# Los datos se respaldan automáticamente en:
+./respaldos/backup_YYYYMMDD_HHMMSS/
+```
+
+## 🔧 Solución de Problemas
+
+### Bot No Responde en el Grupo
+1. Verificar que el grupo se llame exactamente **"PEDIDOS DAATCS"**
+2. Verificar que el bot esté activo: `pm2 list`
+3. Ver logs: `pm2 logs daatcs-bot`
+
+### Comandos de Admin No Funcionan
+1. Verificar que el número esté en la lista de `admins` en `config.js`
+2. Verificar formato del número (sin + ni espacios)
+
+### Productos No Se Muestran
+1. Verificar archivo `productos-daatcs.js`
+2. Reiniciar bot: `pm2 restart daatcs-bot`
+
+## 📁 Estructura de Archivos DAATCS
+
+```
+daatcs-bot/
+├── index.js                 # Bot principal
+├── config.js               # Configuración DAATCS
+├── productos-daatcs.js     # Catálogo predefinido
+├── package.json            # Dependencias
+├── auth/                   # Sesión WhatsApp
+├── data/                   # Base de datos
+│   ├── pedidos.json
+│   ├── productos.json
+│   ├── clientes.json
+│   └── configuracion.json
+├── respaldos/             # Copias seguridad
+└── scripts/               # Scripts utilidad
+    ├── start.sh
+    ├── stop.sh
+    └── backup.sh
+```
+
+## 📞 Soporte DAATCS Studios
+
+- **WhatsApp Bot**: Envía "soporte" al grupo
+- **Directo**: +57 XXX XXX XXXX
+- **Email**: soporte@daatcsstudios.com
+- **Web**: www.daatcsstudios.com
+
+## 📄 Licencia
+
+Proyecto bajo Licencia MIT - Ver `LICENSE`
+
+---
+
+### 🎯 Roadmap DAATCS
+
+- [ ] 💳 Integración pagos en línea
+- [ ] 📱 App móvil complementaria  
+- [ ] 🎨 Generador diseños IA
+- [ ] 📊 Dashboard web admin
+- [ ] 🚚 Tracking envíos tiempo real
+- [ ] 💬 Chat soporte integrado
+
+**🎨 ¡DAATCS STUDIOS - Sublimaciones de Alta Calidad!** ✨
+
+## 🚀 Instalación
+
+### Opción 1: Instalación Automática (Termux)
+
+```bash
+# Actualizar sistema
+termux-setup-storage
+apt update -y && yes | apt upgrade
+
+# Instalar dependencias
+pkg install -y bash wget mpv git nodejs ffmpeg imagemagick yarn
+
+# Clonar y configurar
+git clone [TU-REPOSITORIO]
+cd bot-pedidos-whatsapp
+yarn install && npm install
+npm start
+```
+
+### Opción 2: Instalación Manual
+
+```bash
+# 1. Preparar Termux
+termux-setup-storage
+apt update && apt upgrade
+pkg install -y git nodejs ffmpeg imagemagick yarn
+
+# 2. Clonar repositorio
+git clone [TU-REPOSITORIO]
+cd bot-pedidos-whatsapp
+
+# 3. Instalar dependencias
+yarn install
+npm install
+
+# 4. Configurar bot
+nano config.js  # Editar números de admin
+
+# 5. Iniciar bot
+npm start
+```
+
+### Opción 3: Windows
+
+1. **Descargar e instalar:**
+   - [Node.js](https://nodejs.org/)
+   - [Git](https://git-scm.com/)
+   - [FFmpeg](https://www.gyan.dev/ffmpeg/builds/)
+
+2. **Configurar FFmpeg:**
+   ```cmd
+   # Extraer FFmpeg a C:\ffmpeg\
+   setx /m PATH "C:\ffmpeg\bin;%PATH%"
+   ```
+
+3. **Instalar bot:**
+   ```cmd
+   git clone [TU-REPOSITORIO]
+   cd bot-pedidos-whatsapp
+   npm install
+   npm start
+   ```
 
 ## ⚙️ Configuración Inicial
 
 ### 1. Configurar Administradores
 
-Edita el archivo `config.js`:
+Edita `config.js` y agrega tus números de administrador:
 
 ```javascript
-adminNumbers: [
-    '5215551234567',  // Reemplaza con números reales
-    '5215559876543'   // Formato: código país + número sin espacios
-]
+admins: [
+  '573123456789', // Tu número sin +
+  '573987654321'  // Otros admins
+],
 ```
 
-### 2. Personalizar Empresa
+### 2. Personalizar Mensajes
 
-```javascript
-empresa: {
-    nombre: 'DAATCS Sublimaciones',
-    eslogan: 'Tu imagen, nuestro arte',
-    contacto: {
-        telefono: '+52 55 1234 5678',
-        email: 'contacto@daatcs.com',
-        direccion: 'Tu dirección aquí'
-    }
-}
-```
+Puedes personalizar los mensajes del bot editando el objeto `mensajes` en `config.js`.
 
-### 3. Primera Ejecución
+### 3. Configurar Base de Datos
 
-1. Ejecuta: `node start.js`
-2. Escanea el código QR con WhatsApp
-3. ¡El bot estará listo!
+El bot crea automáticamente las siguientes carpetas:
+- `./data/` - Archivos de base de datos
+- `./respaldos/` - Copias de seguridad
+- `./auth/` - Sesión de WhatsApp
 
 ## 📱 Comandos Disponibles
 
-### 👥 Para Todos los Usuarios
+### 👥 Para Clientes
 
 | Comando | Descripción | Ejemplo |
 |---------|-------------|---------|
-| `!ayuda` | Mostrar ayuda completa | `!ayuda` |
-| `!catalogo` | Ver productos disponibles | `!catalogo` |
-| `!contacto` | Información de contacto | `!contacto` |
-| `!mispedidos` | Ver mis pedidos | `!mispedidos` |
-| `!estado [ID]` | Consultar estado de pedido | `!estado DAA240101001` |
-| `!estadisticas` | Ver mis estadísticas personales | `!estadisticas` |
+| `.menu` | Ver todos los comandos | `.menu` |
+| `.productos` | Ver productos disponibles | `.productos` |
+| `.buscar [término]` | Buscar productos | `.buscar pizza` |
+| `.registrarme [datos]` | Registrarse como cliente | `.registrarme Juan 3001234567 Calle 123` |
+| `.miperfil` | Ver mi información | `.miperfil` |
+| `.nuevopedido` | Crear nuevo pedido | `.nuevopedido` |
+| `.agregaralcarrito` | Agregar producto al pedido | `.agregaralcarrito PED-123 PROD-456 2` |
+| `.mispedidos` | Ver mis pedidos | `.mispedidos` |
+| `.pedido [id]` | Ver detalles de pedido | `.pedido PED-123` |
+| `.confirmarpedido [id]` | Confirmar pedido | `.confirmarpedido PED-123` |
+| `.cancelarpedido [id]` | Cancelar pedido | `.cancelarpedido PED-123` |
 
-### 👑 Para Administradores
+### 🔧 Para Administradores
 
 | Comando | Descripción | Ejemplo |
 |---------|-------------|---------|
-| `!admin` | Ver comandos de administrador | `!admin` |
-| `!listapedidos` | Todos los pedidos | `!listapedidos` |
-| `!pedidospendientes` | Solo pedidos pendientes | `!pedidospendientes` |
-| `!cambiarestado [ID] [estado]` | Cambiar estado | `!cambiarestado DAA240101001 listo` |
-| `!buscarpedido [ID]` | Buscar pedido específico | `!buscarpedido DAA240101001` |
-| `!buscarcliente [término]` | Buscar cliente | `!buscarcliente Juan` |
-| `!reporte [días]` | Reporte de ventas | `!reporte 30` |
-| `!backup` | Crear backup manual | `!backup` |
-| `!exportar` | Exportar datos a CSV | `!exportar` |
-| `!salud` | Estado del sistema | `!salud` |
-
-## 📝 Formato de Pedido
-
-### Formato Básico
-
-```
-Cliente: Juan Pérez
-Teléfono: 55 1234 5678
-Producto: Taza personalizada con logo empresarial
-Cantidad: 5
-Precio: 50
-Nota: Logo en alta resolución, fondo blanco
-```
-
-### Campos Disponibles
-
-- **Cliente:** (Requerido) Nombre completo
-- **Teléfono:** Número de contacto
-- **Producto:** (Requerido) Descripción del producto
-- **Cantidad:** Número de piezas (default: 1)
-- **Precio:** Costo por pieza
-- **Nota:** Observaciones especiales
-
-### Ejemplo Completo
-
-```
-Cliente: María González
-Teléfono: +52 55 9876 5432
-Producto: Playeras polo sublimadas
-Cantidad: 20
-Precio: 120
-Nota: Tallas variadas (S:5, M:10, L:5), logo centrado en pecho
-```
+| `.agregarproducto` | Agregar nuevo producto | `.agregarproducto Pizza 15000 Pizza familiar` |
+| `.editarproducto` | Editar producto existente | `.editarproducto PROD-123 precio 18000` |
+| `.eliminarproducto` | Eliminar producto | `.eliminarproducto PROD-123` |
+| `.todospedidos` | Ver todos los pedidos | `.todospedidos` |
+| `.cambiarestado` | Cambiar estado de pedido | `.cambiarestado PED-123 enviado` |
+| `.estadisticas` | Ver estadísticas del negocio | `.estadisticas` |
+| `.respaldar` | Crear respaldo manual | `.respaldar` |
 
 ## 📊 Estados de Pedidos
 
-| Estado | Descripción | Emoji |
-|--------|-------------|-------|
-| `pendiente` | Recién recibido, esperando confirmación | ⏳ |
-| `confirmado` | Pedido confirmado, listo para producción | ✅ |
-| `en_proceso` | En producción | 🔄 |
-| `listo` | Terminado, listo para entrega | 📦 |
-| `entregado` | Entregado al cliente | 🎉 |
-| `cancelado` | Pedido cancelado | ❌ |
+- **📝 Borrador**: Pedido en construcción
+- **✅ Confirmado**: Cliente confirmó el pedido
+- **⚙️ Procesando**: Pedido en preparación
+- **🚚 Enviado**: Pedido enviado al cliente
+- **📦 Entregado**: Pedido completado
+- **❌ Cancelado**: Pedido cancelado
 
-## 🗂️ Estructura del Proyecto
+## 🔧 Mantenimiento
 
-```
-bot-pedidos-daatcs/
-├── 📄 start.js              # Archivo principal del bot
-├── 📄 utils.js              # Funciones auxiliares
-├── 📄 comandos.js           # Sistema de comandos
-├── 📄 config.js             # Configuración
-├── 📄 package.json          # Dependencias Node.js
-├── 📄 install.sh            # Script de instalación
-├── 📁 data/                 # Datos persistentes
-│   ├── pedidos.json         # Base de datos de pedidos
-│   └── clientes.json        # Base de datos de clientes
-├── 📁 auth/                 # Autenticación WhatsApp
-├── 📁 logs/                 # Archivos de log
-├── 📁 backups/              # Backups automáticos
-└── 📁 exports/              # Exportaciones CSV
-```
-
-## 🛠️ Mantenimiento
-
-### Comandos Útiles
+### Mantener Bot Activo (Termux)
 
 ```bash
-# Iniciar bot
-node start.js
-
-# Iniciar con reinicio automático
-./auto-restart.sh
-
-# Ver logs en tiempo real
-tail -f logs/bot_$(date +%Y-%m-%d).log
-
-# Crear backup manual
-node -e "require('./utils').crearBackup(require('./data/pedidos.json'), require('./data/clientes.json'))"
-
-# Ver estado del sistema
-node -e "console.log(require('./utils').verificarSaludSistema())"
+# Usar PM2 para mantener el bot activo
+termux-wake-lock
+npm i -g pm2
+pm2 start index.js --name "bot-pedidos"
+pm2 save
+pm2 startup
 ```
 
-### Backups
+### Comandos PM2 Útiles
 
-- **Automático**: Cada 24 horas (configurable)
-- **Manual**: Comando `!backup` (solo admins)
-- **Ubicación**: `./backups/`
-- **Retención**: 7 archivos (configurable)
+```bash
+pm2 logs bot-pedidos    # Ver logs
+pm2 restart bot-pedidos # Reiniciar bot
+pm2 stop bot-pedidos    # Detener bot
+pm2 delete bot-pedidos  # Eliminar proceso
+```
 
-### Logs
+### Actualizar Bot
 
-- **Ubicación**: `./logs/bot_YYYY-MM-DD.log`
-- **Rotación**: Diaria automática
-- **Niveles**: debug, info, warn, error
+```bash
+cd bot-pedidos-whatsapp
+git pull origin main
+npm install
+pm2 restart bot-pedidos
+```
 
-## 🔧 Solución de Problemas
+### Respaldos Automáticos
 
-### Bot no se conecta
+El bot crea respaldos automáticos cada vez que se guardan datos. Para crear respaldo manual:
 
-1. Verificar conexión a internet
-2. Eliminar carpeta `auth/` y volver a escanear QR
-3. Actualizar dependencias: `npm update`
+```bash
+# Desde WhatsApp
+.respaldar
 
-### No reconoce el grupo
+# Desde terminal
+cp -r data/ respaldos/backup-$(date +%Y%m%d)/
+```
 
-1. Verificar que el bot esté en el grupo "PEDIDOS DAATCS"
-2. Verificar permisos del bot en el grupo
-3. Revisar configuración en `config.js`
+## 🐛 Solución de Problemas
 
-### Errores de permisos
+### Bot No Responde
+1. Verificar que el proceso esté activo: `pm2 list`
+2. Ver logs de errores: `pm2 logs bot-pedidos`
+3. Reiniciar bot: `pm2 restart bot-pedidos`
 
-1. Verificar números de admin en `config.js`
-2. Usar formato correcto: código país + número
-3. Ejemplo: `'5215551234567'`
+### Problemas de Conexión
+1. Eliminar sesión: `rm -rf auth/`
+2. Reiniciar bot: `npm start`
+3. Escanear nuevo código QR
 
-### Datos perdidos
+### Datos Corruptos
+1. Restaurar desde respaldo:
+   ```bash
+   cp respaldos/[fecha]-*.json data/
+   pm2 restart bot-pedidos
+   ```
 
-1. Restaurar desde backup: `./
+### Comandos No Funcionan
+1. Verificar que el número esté registrado como admin en `config.js`
+2. Verificar sintaxis del comando
+3. Verificar permisos del comando
+
+## 📝 Estructura de Archivos
+
+```
+bot-pedidos-whatsapp/
+├── index.js              # Archivo principal
+├── config.js             # Configuración
+├── utils.js              # Funciones utilitarias
+├── comandos-extra.js     # Comandos adicionales
+├── package.json          # Dependencias
+├── auth/                 # Sesión WhatsApp
+├── data/                 # Base de datos
+│   ├── pedidos.json
+│   ├── productos.json
+│   └── clientes.json
+├── respaldos/            # Copias de seguridad
+└── README.md            # Documentación
+```
+
+## 🔒 Seguridad
+
+- Solo los números configurados como admin pueden usar comandos administrativos
+- Los datos se almacenan localmente en archivos JSON
+- Se crean respaldos automáticos de los datos
+- Las sesiones de WhatsApp se manejan de forma segura
+
+## 📞 Soporte
+
+Para soporte técnico o reportar errores:
+
+1. **GitHub**: Crear issue en el repositorio
+2. **WhatsApp**: Enviar "soporte" al bot
+3. **Email**: [tu-email@dominio.com]
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver archivo `LICENSE` para más detalles.
+
+---
+
+### 🎯 Próximas Características
+
+- [ ] Integración con pasarelas de pago
+- [ ] Reportes en PDF
+- [ ] Notificaciones push
+- [ ] Panel web de administración
+- [ ] API REST
+- [ ] Múltiples idiomas
+
+¡Gracias por usar nuestro Bot de Gestión de Pedidos! 🚀
