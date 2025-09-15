@@ -519,4 +519,419 @@ class BotPedidosDAATCS {
     generarIdPedido() {
         const fecha = new Date();
         const año = fecha.getFullYear().toString().slice(-2);
-        const mes = String(fecha.getMonth() + 1).padStart
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const dia = String(fecha.getDate()).padStart(2, '0');
+        const contador = String(this.pedidos.length + 1).padStart(3, '0');
+        
+        return `DAA${año}${mes}${dia}${contador}`;
+    }
+
+    // Generar resumen de pedido
+    generarResumenPedido(pedido) {
+        let resumen = `🎨 *PEDIDO REGISTRADO - ${config.empresa.nombre.toUpperCase()}*\n\n`;
+        resumen += `📋 *ID:* ${pedido.id}\n`;
+        resumen += `👤 *Cliente:* ${pedido.nombreCliente}\n`;
+        resumen += `📱 *Teléfono:* ${pedido.telefono}\n`;
+        resumen += `📅 *Fecha:* ${new Date(pedido.fecha).toLocaleString('es-ES')}\n`;
+        resumen += `📊 *Estado:* ${pedido.estado.toUpperCase()}\n\n`;
+        
+        resumen += `📦 *PRODUCTOS SOLICITADOS:*\n`;
+        pedido.items.forEach((item, index) => {
+            resumen += `${index + 1}. *${item.producto}*\n`;
+            resumen += `   • Cantidad: ${item.cantidad} unidades\n`;
+            resumen += `   • Precio unitario: ${Utils.formatearMoneda(item.precio)}\n`;
+            resumen += `   • Subtotal: ${Utils.formatearMoneda(item.cantidad * item.precio)}\n\n`;
+        });
+        
+        resumen += `💰 *TOTAL: ${Utils.formatearMoneda(pedido.total)}*\n\n`;
+        
+        if (pedido.tiempoEstimado) {
+            resumen += `⏱️ *${pedido.tiempoEstimado.mensaje}*\n`;
+            resumen += `📅 *Fecha estimada de entrega:* ${pedido.tiempoEstimado.fechaEstimada}\n\n`;
+        }
+        
+        if (pedido.notas) {
+            resumen += `📝 *Notas especiales:* ${pedido.notas}\n\n`;
+        }
+        
+        resumen += `✅ *Tu pedido ha sido registrado exitosamente.*\n`;
+        resumen += `🔍 Para consultar el estado usa: !estado ${pedido.id}\n`;
+        resumen += `📞 Para dudas contacta: ${config.empresa.contacto.telefono || 'Ver !contacto'}`;
+        
+        return resumen;
+    }
+
+    // Mostrar pedidos del usuario
+    async mostrarPedidosUsuario(sender, senderNumber) {
+        const pedidosUsuario = this.pedidos.filter(p => p.cliente === senderNumber);
+        
+        if (pedidosUsuario.length === 0) {
+            await this.sock.sendMessage(sender, { 
+                text: '📋 No tienes pedidos registrados.\n\nPara crear un pedido, usa el formato que aparece en !ayuda' 
+            });
+            return;
+        }
+        
+        let listText = `📋 *TUS PEDIDOS (${pedidosUsuario.length}):*\n\n`;
+        
+        pedidosUsuario
+            .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+            .forEach(pedido => {
+                const fechaFormat = new Date(pedido.fecha).toLocaleDateString('es-ES');
+                const estadoEmoji = this.obtenerEmojiEstado(pedido.estado);
+                
+                listText += `${estadoEmoji} *${pedido.id}*\n`;
+                listText += `   📅 ${fechaFormat}\n`;
+                listText += `   📊 ${pedido.estado.toUpperCase()}\n`;
+                listText += `   💰 ${Utils.formatearMoneda(pedido.total)}\n`;
+                listText += `   📦 ${pedido.items.length} producto(s)\n\n`;
+            });
+            
+        listText += `💡 Usa !estado [ID] para ver detalles específicos`;
+        
+        await this.sock.sendMessage(sender, { text: listText });
+    }
+
+    // Consultar estado específico de pedido
+    async consultarEstadoPedido(sender, senderNumber, pedidoId) {
+        if (!pedidoId) {
+            await this.sock.sendMessage(sender, { 
+                text: '❌ Uso correcto: !estado [ID_PEDIDO]\n\nEjemplo: !estado DAA240101001' 
+            });
+            return;
+        }
+        
+        const pedido = this.pedidos.find(p => p.id === pedidoId && p.cliente === senderNumber);
+        if (!pedido) {
+            await this.sock.sendMessage(sender, { 
+                text: '❌ Pedido no encontrado o no tienes permisos para consultarlo.' 
+            });
+            return;
+        }
+        
+        const resumenDetallado = this.generarResumenDetallado(pedido);
+        await this.sock.sendMessage(sender, { text: resumenDetallado });
+    }
+
+    // Generar resumen detallado del pedido
+    generarResumenDetallado(pedido) {
+        const estadoEmoji = this.obtenerEmojiEstado(pedido.estado);
+        const fechaCreacion = new Date(pedido.fecha).toLocaleString('es-ES');
+        
+        let resumen = `${estadoEmoji} *DETALLE DEL PEDIDO ${pedido.id}*\n\n`;
+        
+        resumen += `👤 *Cliente:* ${pedido.nombreCliente}\n`;
+        resumen += `📱 *Teléfono:* ${pedido.telefono}\n`;
+        resumen += `📅 *Fecha de pedido:* ${fechaCreacion}\n`;
+        resumen += `📊 *Estado actual:* ${pedido.estado.toUpperCase()}\n\n`;
+        
+        resumen += `📦 *PRODUCTOS:*\n`;
+        pedido.items.forEach((item, index) => {
+            resumen += `${index + 1}. ${item.producto}\n`;
+            resumen += `   • Cantidad: ${item.cantidad}\n`;
+            resumen += `   • Precio: ${Utils.formatearMoneda(item.precio)} c/u\n`;
+            resumen += `   • Subtotal: ${Utils.formatearMoneda(item.cantidad * item.precio)}\n\n`;
+        });
+        
+        resumen += `💰 *TOTAL: ${Utils.formatearMoneda(pedido.total)}*\n\n`;
+        
+        if (pedido.tiempoEstimado) {
+            resumen += `⏱️ *Tiempo estimado:* ${pedido.tiempoEstimado.dias} día(s)\n`;
+            resumen += `📅 *Fecha estimada:* ${pedido.tiempoEstimado.fechaEstimada}\n\n`;
+        }
+        
+        if (pedido.notas) {
+            resumen += `📝 *Notas:* ${pedido.notas}\n\n`;
+        }
+        
+        // Información del estado
+        resumen += this.obtenerInfoEstado(pedido.estado);
+        
+        return resumen;
+    }
+
+    // Obtener emoji según estado
+    obtenerEmojiEstado(estado) {
+        const emojis = {
+            'pendiente': '⏳',
+            'confirmado': '✅',
+            'en_proceso': '🔄',
+            'listo': '📦',
+            'entregado': '🎉',
+            'cancelado': '❌'
+        };
+        return emojis[estado] || '📋';
+    }
+
+    // Obtener información del estado
+    obtenerInfoEstado(estado) {
+        const info = {
+            'pendiente': '⏳ Tu pedido está en espera de confirmación.',
+            'confirmado': '✅ Pedido confirmado. Iniciando producción.',
+            'en_proceso': '🔄 Tu pedido está siendo elaborado.',
+            'listo': '📦 ¡Tu pedido está listo! Puedes pasar a recogerlo.',
+            'entregado': '🎉 Pedido entregado. ¡Gracias por tu confianza!',
+            'cancelado': '❌ Pedido cancelado.'
+        };
+        
+        return info[estado] || 'Estado desconocido.';
+    }
+
+    // Mostrar comandos de administrador
+    async mostrarComandosAdmin(sender) {
+        let adminText = `👑 *COMANDOS DE ADMINISTRADOR*\n\n`;
+        adminText += `📋 *Gestión de Pedidos:*\n`;
+        adminText += `• !listapedidos - Ver todos los pedidos\n`;
+        adminText += `• !pedidospendientes - Solo pedidos pendientes\n`;
+        adminText += `• !buscarpedido [ID] - Buscar pedido específico\n`;
+        adminText += `• !cambiarestado [ID] [estado] - Cambiar estado\n\n`;
+        
+        adminText += `👥 *Gestión de Clientes:*\n`;
+        adminText += `• !buscarcliente [término] - Buscar cliente\n\n`;
+        
+        adminText += `📊 *Reportes y Análisis:*\n`;
+        adminText += `• !estadisticas - Estadísticas generales\n`;
+        adminText += `• !reporte [días] - Reporte de ventas\n\n`;
+        
+        adminText += `🔧 *Sistema:*\n`;
+        adminText += `• !backup - Crear backup manual\n`;
+        adminText += `• !exportar - Exportar datos a CSV\n`;
+        adminText += `• !salud - Estado del sistema\n\n`;
+        
+        adminText += `📋 *Estados disponibles:*\n`;
+        config.estadosPedidos.forEach(estado => {
+            adminText += `• ${estado}\n`;
+        });
+        
+        await this.sock.sendMessage(sender, { text: adminText });
+    }
+
+    // Mostrar todos los pedidos (admin)
+    async mostrarTodosPedidos(sender) {
+        if (this.pedidos.length === 0) {
+            await this.sock.sendMessage(sender, { text: '📋 No hay pedidos registrados.' });
+            return;
+        }
+        
+        let listText = `📋 *TODOS LOS PEDIDOS (${this.pedidos.length})*\n\n`;
+        
+        this.pedidos
+            .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+            .slice(0, 20) // Mostrar solo los últimos 20
+            .forEach(pedido => {
+                const estadoEmoji = this.obtenerEmojiEstado(pedido.estado);
+                const fecha = new Date(pedido.fecha).toLocaleDateString('es-ES');
+                
+                listText += `${estadoEmoji} *${pedido.id}*\n`;
+                listText += `   👤 ${pedido.nombreCliente}\n`;
+                listText += `   📅 ${fecha}\n`;
+                listText += `   📊 ${pedido.estado.toUpperCase()}\n`;
+                listText += `   💰 ${Utils.formatearMoneda(pedido.total)}\n\n`;
+            });
+            
+        if (this.pedidos.length > 20) {
+            listText += `... y ${this.pedidos.length - 20} pedidos más\n\n`;
+        }
+        
+        listText += `💡 Usa !buscarpedido [ID] para ver detalles`;
+        
+        await this.sock.sendMessage(sender, { text: listText });
+    }
+
+    // Cambiar estado de pedido (admin)
+    async cambiarEstadoPedido(sender, pedidoId, nuevoEstado) {
+        const pedido = this.pedidos.find(p => p.id === pedidoId);
+        
+        if (!pedido) {
+            await this.sock.sendMessage(sender, { text: '❌ Pedido no encontrado.' });
+            return;
+        }
+        
+        if (!config.estadosPedidos.includes(nuevoEstado.toLowerCase())) {
+            const estadosTexto = config.estadosPedidos.join(', ');
+            await this.sock.sendMessage(sender, { 
+                text: `❌ Estado inválido.\n\nEstados disponibles: ${estadosTexto}` 
+            });
+            return;
+        }
+        
+        const estadoAnterior = pedido.estado;
+        pedido.estado = nuevoEstado.toLowerCase();
+        pedido.ultimaActualizacion = new Date().toISOString();
+        
+        this.guardarDatos();
+        
+        // Confirmación al admin
+        await this.sock.sendMessage(sender, { 
+            text: `✅ Estado del pedido ${pedidoId} cambiado:\n${estadoAnterior.toUpperCase()} → ${nuevoEstado.toUpperCase()}` 
+        });
+        
+        // Notificar al cliente si está habilitado
+        if (config.notificaciones.cambioEstado) {
+            await this.notificarCambioEstado(pedido, estadoAnterior);
+        }
+        
+        Utils.log('info', `Estado cambiado: ${pedidoId}`, { 
+            anterior: estadoAnterior, 
+            nuevo: nuevoEstado 
+        });
+    }
+
+    // Buscar pedido específico (admin)
+    async buscarPedido(sender, pedidoId) {
+        const pedido = this.pedidos.find(p => p.id === pedidoId);
+        
+        if (!pedido) {
+            await this.sock.sendMessage(sender, { text: '❌ Pedido no encontrado.' });
+            return;
+        }
+        
+        const resumenAdmin = this.generarResumenAdmin(pedido);
+        await this.sock.sendMessage(sender, { text: resumenAdmin });
+    }
+
+    // Generar resumen para administrador
+    generarResumenAdmin(pedido) {
+        const estadoEmoji = this.obtenerEmojiEstado(pedido.estado);
+        const fechaCreacion = new Date(pedido.fecha).toLocaleString('es-ES');
+        
+        let resumen = `${estadoEmoji} *PEDIDO ${pedido.id}* (Admin)\n\n`;
+        
+        resumen += `👤 *Cliente:* ${pedido.nombreCliente}\n`;
+        resumen += `📱 *Teléfono:* ${pedido.telefono}\n`;
+        resumen += `🆔 *WhatsApp:* ${pedido.cliente.replace('@s.whatsapp.net', '')}\n`;
+        resumen += `📅 *Fecha:* ${fechaCreacion}\n`;
+        resumen += `📊 *Estado:* ${pedido.estado.toUpperCase()}\n\n`;
+        
+        resumen += `📦 *PRODUCTOS:*\n`;
+        pedido.items.forEach((item, index) => {
+            resumen += `${index + 1}. ${item.producto}\n`;
+            resumen += `   • Cantidad: ${item.cantidad}\n`;
+            resumen += `   • Precio: ${Utils.formatearMoneda(item.precio)} c/u\n`;
+            resumen += `   • Subtotal: ${Utils.formatearMoneda(item.cantidad * item.precio)}\n\n`;
+        });
+        
+        resumen += `💰 *TOTAL: ${Utils.formatearMoneda(pedido.total)}*\n\n`;
+        
+        if (pedido.tiempoEstimado) {
+            resumen += `⏱️ *Tiempo estimado:* ${pedido.tiempoEstimado.mensaje}\n`;
+        }
+        
+        if (pedido.notas) {
+            resumen += `📝 *Notas:* ${pedido.notas}\n\n`;
+        }
+        
+        if (pedido.ultimaActualizacion) {
+            resumen += `🔄 *Última actualización:* ${new Date(pedido.ultimaActualizacion).toLocaleString('es-ES')}\n`;
+        }
+        
+        resumen += `\n🔧 Para cambiar estado: !cambiarestado ${pedido.id} [nuevo_estado]`;
+        
+        return resumen;
+    }
+
+    // Notificar administradores sobre nuevo pedido
+    async notificarAdminsNuevoPedido(pedido) {
+        const notificacion = `🔔 *NUEVO PEDIDO RECIBIDO*\n\n` +
+            `📋 *ID:* ${pedido.id}\n` +
+            `👤 *Cliente:* ${pedido.nombreCliente}\n` +
+            `💰 *Total:* ${Utils.formatearMoneda(pedido.total)}\n` +
+            `📦 *Productos:* ${pedido.items.length}\n\n` +
+            `Usa !buscarpedido ${pedido.id} para ver detalles completos.`;
+        
+        for (const adminNumber of config.adminNumbers) {
+            try {
+                const adminJid = adminNumber.includes('@') ? adminNumber : `${adminNumber}@s.whatsapp.net`;
+                await this.sock.sendMessage(adminJid, { text: notificacion });
+            } catch (error) {
+                Utils.log('error', 'Error notificando admin', { adminNumber, error });
+            }
+        }
+    }
+
+    // Notificar cliente sobre cambio de estado
+    async notificarCambioEstado(pedido, estadoAnterior) {
+        const estadoEmoji = this.obtenerEmojiEstado(pedido.estado);
+        const infoEstado = this.obtenerInfoEstado(pedido.estado);
+        
+        const notificacion = `${estadoEmoji} *ACTUALIZACIÓN DE PEDIDO*\n\n` +
+            `📋 *Pedido:* ${pedido.id}\n` +
+            `📊 *Nuevo estado:* ${pedido.estado.toUpperCase()}\n\n` +
+            `${infoEstado}\n\n` +
+            `💡 Usa !estado ${pedido.id} para ver todos los detalles.`;
+        
+        try {
+            const clienteJid = pedido.cliente.includes('@') ? pedido.cliente : `${pedido.cliente}@s.whatsapp.net`;
+            await this.sock.sendMessage(clienteJid, { text: notificacion });
+            Utils.log('info', `Notificación enviada a cliente: ${pedido.id}`);
+        } catch (error) {
+            Utils.log('error', 'Error notificando cliente', { pedidoId: pedido.id, error });
+        }
+    }
+
+    // Configurar tareas programadas
+    configurarTareasProgramadas() {
+        // Backup automático
+        if (config.backup.habilitado) {
+            setInterval(() => {
+                Utils.crearBackup(this.pedidos, this.clientes);
+            }, config.backup.intervaloHoras * 60 * 60 * 1000);
+        }
+        
+        // Verificación de pedidos vencidos (cada 12 horas)
+        setInterval(() => {
+            if (this.comandos) {
+                this.comandos.verificarPedidosVencidos();
+            }
+        }, 12 * 60 * 60 * 1000);
+        
+        // Estadísticas diarias (cada 24 horas)
+        setInterval(() => {
+            Utils.log('info', 'Estadísticas diarias', {
+                pedidos: this.pedidos.length,
+                clientes: Object.keys(this.clientes).length,
+                memoria: process.memoryUsage()
+            });
+        }, 24 * 60 * 60 * 1000);
+    }
+
+    // Manejo de cierre graceful
+    configurarCierreGraceful() {
+        const cerrar = () => {
+            console.log('\n🛑 Cerrando bot...');
+            Utils.log('info', 'Bot cerrándose');
+            this.guardarDatos();
+            Utils.crearBackup(this.pedidos, this.clientes);
+            process.exit(0);
+        };
+
+        process.on('SIGINT', cerrar);
+        process.on('SIGTERM', cerrar);
+        process.on('uncaughtException', (error) => {
+            Utils.log('error', 'Excepción no capturada', error);
+            cerrar();
+        });
+    }
+}
+
+// Inicializar y ejecutar el bot
+const bot = new BotPedidosDAATCS();
+
+// Configurar manejo de errores
+bot.configurarCierreGraceful();
+
+// Mensaje de inicio
+console.log(`
+🎨 ================================
+   BOT PEDIDOS ${config.empresa.nombre.toUpperCase()}
+   ${config.empresa.eslogan}
+================================ 🎨
+`);
+
+// Iniciar bot
+bot.inicializar().catch(error => {
+    console.error('❌ Error crítico:', error);
+    process.exit(1);
+});
+
+module.exports = BotPedidosDAATCS;
