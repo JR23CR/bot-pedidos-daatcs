@@ -1,0 +1,31 @@
+{
+  "name": "bot-pedidos-daatcs",
+  "version": "1.0.0",
+  "description": "Bot de WhatsApp para gestionar pedidos de sublimaciones DAATCS",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "pedidos",
+    "sublimaciones",
+    "daatcs"
+  ],
+  "author": "DAATCS",
+  "license": "MIT",
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.5.0",
+    "@hapi/boom": "^10.0.1",
+    "pino": "^8.15.0",
+    "qrcode-terminal": "^0.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
