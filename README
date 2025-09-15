@@ -1,0 +1,230 @@
+# 🤖 Bot de Pedidos DAATCS
+
+Bot de WhatsApp especializado para gestión de pedidos de sublimaciones que funciona exclusivamente en el grupo "PEDIDOS DAATCS".
+
+## 🌟 Características Principales
+
+- ✅ **Registro automático de pedidos** con formato inteligente
+- 📊 **Seguimiento de estados** en tiempo real
+- 👥 **Gestión completa de clientes** con historial
+- 📈 **Estadísticas y reportes** detallados
+- 🔐 **Sistema de permisos** para administradores
+- 💾 **Persistencia de datos** con backup automático
+- 🎨 **Interfaz amigable** con emojis y formato claro
+- ⏰ **Notificaciones automáticas** y recordatorios
+- 📱 **Optimizado para Termux** en Android
+
+## 🚀 Instalación Rápida en Termux
+
+### Método 1: Instalación Automática
+
+```bash
+# Descargar e instalar automáticamente
+curl -sSL https://raw.githubusercontent.com/tu-usuario/bot-pedidos-daatcs/main/install.sh | bash
+```
+
+### Método 2: Instalación Manual
+
+```bash
+# Actualizar Termux
+pkg update -y && pkg upgrade -y
+
+# Instalar dependencias
+pkg install nodejs npm git -y
+
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/bot-pedidos-daatcs.git
+cd bot-pedidos-daatcs
+
+# Instalar dependencias de Node.js
+npm install
+
+# Configurar el bot
+cp config.example.js config.js
+nano config.js  # Editar configuración
+
+# Ejecutar
+node start.js
+```
+
+## ⚙️ Configuración Inicial
+
+### 1. Configurar Administradores
+
+Edita el archivo `config.js`:
+
+```javascript
+adminNumbers: [
+    '5215551234567',  // Reemplaza con números reales
+    '5215559876543'   // Formato: código país + número sin espacios
+]
+```
+
+### 2. Personalizar Empresa
+
+```javascript
+empresa: {
+    nombre: 'DAATCS Sublimaciones',
+    eslogan: 'Tu imagen, nuestro arte',
+    contacto: {
+        telefono: '+52 55 1234 5678',
+        email: 'contacto@daatcs.com',
+        direccion: 'Tu dirección aquí'
+    }
+}
+```
+
+### 3. Primera Ejecución
+
+1. Ejecuta: `node start.js`
+2. Escanea el código QR con WhatsApp
+3. ¡El bot estará listo!
+
+## 📱 Comandos Disponibles
+
+### 👥 Para Todos los Usuarios
+
+| Comando | Descripción | Ejemplo |
+|---------|-------------|---------|
+| `!ayuda` | Mostrar ayuda completa | `!ayuda` |
+| `!catalogo` | Ver productos disponibles | `!catalogo` |
+| `!contacto` | Información de contacto | `!contacto` |
+| `!mispedidos` | Ver mis pedidos | `!mispedidos` |
+| `!estado [ID]` | Consultar estado de pedido | `!estado DAA240101001` |
+| `!estadisticas` | Ver mis estadísticas personales | `!estadisticas` |
+
+### 👑 Para Administradores
+
+| Comando | Descripción | Ejemplo |
+|---------|-------------|---------|
+| `!admin` | Ver comandos de administrador | `!admin` |
+| `!listapedidos` | Todos los pedidos | `!listapedidos` |
+| `!pedidospendientes` | Solo pedidos pendientes | `!pedidospendientes` |
+| `!cambiarestado [ID] [estado]` | Cambiar estado | `!cambiarestado DAA240101001 listo` |
+| `!buscarpedido [ID]` | Buscar pedido específico | `!buscarpedido DAA240101001` |
+| `!buscarcliente [término]` | Buscar cliente | `!buscarcliente Juan` |
+| `!reporte [días]` | Reporte de ventas | `!reporte 30` |
+| `!backup` | Crear backup manual | `!backup` |
+| `!exportar` | Exportar datos a CSV | `!exportar` |
+| `!salud` | Estado del sistema | `!salud` |
+
+## 📝 Formato de Pedido
+
+### Formato Básico
+
+```
+Cliente: Juan Pérez
+Teléfono: 55 1234 5678
+Producto: Taza personalizada con logo empresarial
+Cantidad: 5
+Precio: 50
+Nota: Logo en alta resolución, fondo blanco
+```
+
+### Campos Disponibles
+
+- **Cliente:** (Requerido) Nombre completo
+- **Teléfono:** Número de contacto
+- **Producto:** (Requerido) Descripción del producto
+- **Cantidad:** Número de piezas (default: 1)
+- **Precio:** Costo por pieza
+- **Nota:** Observaciones especiales
+
+### Ejemplo Completo
+
+```
+Cliente: María González
+Teléfono: +52 55 9876 5432
+Producto: Playeras polo sublimadas
+Cantidad: 20
+Precio: 120
+Nota: Tallas variadas (S:5, M:10, L:5), logo centrado en pecho
+```
+
+## 📊 Estados de Pedidos
+
+| Estado | Descripción | Emoji |
+|--------|-------------|-------|
+| `pendiente` | Recién recibido, esperando confirmación | ⏳ |
+| `confirmado` | Pedido confirmado, listo para producción | ✅ |
+| `en_proceso` | En producción | 🔄 |
+| `listo` | Terminado, listo para entrega | 📦 |
+| `entregado` | Entregado al cliente | 🎉 |
+| `cancelado` | Pedido cancelado | ❌ |
+
+## 🗂️ Estructura del Proyecto
+
+```
+bot-pedidos-daatcs/
+├── 📄 start.js              # Archivo principal del bot
+├── 📄 utils.js              # Funciones auxiliares
+├── 📄 comandos.js           # Sistema de comandos
+├── 📄 config.js             # Configuración
+├── 📄 package.json          # Dependencias Node.js
+├── 📄 install.sh            # Script de instalación
+├── 📁 data/                 # Datos persistentes
+│   ├── pedidos.json         # Base de datos de pedidos
+│   └── clientes.json        # Base de datos de clientes
+├── 📁 auth/                 # Autenticación WhatsApp
+├── 📁 logs/                 # Archivos de log
+├── 📁 backups/              # Backups automáticos
+└── 📁 exports/              # Exportaciones CSV
+```
+
+## 🛠️ Mantenimiento
+
+### Comandos Útiles
+
+```bash
+# Iniciar bot
+node start.js
+
+# Iniciar con reinicio automático
+./auto-restart.sh
+
+# Ver logs en tiempo real
+tail -f logs/bot_$(date +%Y-%m-%d).log
+
+# Crear backup manual
+node -e "require('./utils').crearBackup(require('./data/pedidos.json'), require('./data/clientes.json'))"
+
+# Ver estado del sistema
+node -e "console.log(require('./utils').verificarSaludSistema())"
+```
+
+### Backups
+
+- **Automático**: Cada 24 horas (configurable)
+- **Manual**: Comando `!backup` (solo admins)
+- **Ubicación**: `./backups/`
+- **Retención**: 7 archivos (configurable)
+
+### Logs
+
+- **Ubicación**: `./logs/bot_YYYY-MM-DD.log`
+- **Rotación**: Diaria automática
+- **Niveles**: debug, info, warn, error
+
+## 🔧 Solución de Problemas
+
+### Bot no se conecta
+
+1. Verificar conexión a internet
+2. Eliminar carpeta `auth/` y volver a escanear QR
+3. Actualizar dependencias: `npm update`
+
+### No reconoce el grupo
+
+1. Verificar que el bot esté en el grupo "PEDIDOS DAATCS"
+2. Verificar permisos del bot en el grupo
+3. Revisar configuración en `config.js`
+
+### Errores de permisos
+
+1. Verificar números de admin en `config.js`
+2. Usar formato correcto: código país + número
+3. Ejemplo: `'5215551234567'`
+
+### Datos perdidos
+
+1. Restaurar desde backup: `./
