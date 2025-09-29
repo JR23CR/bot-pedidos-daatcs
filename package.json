@@ -2,10 +2,10 @@
   "name": "bot-pedidos-daatcs",
   "version": "1.0.0",
   "description": "Bot de WhatsApp para gestionar pedidos de sublimaciones DAATCS",
-  "main": "bot.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node bot.js",
-    "dev": "nodemon bot.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [
     "whatsapp",
