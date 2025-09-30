@@ -4,16 +4,17 @@ const config = {
   empresa: {
     nombre: 'DAATCS STUDIOS',
     tipo: 'Sublimaciones y Estampados Personalizados',
-    telefono: '+57 XXX XXX XXXX', // Actualizar con número real
-    email: 'info@daatcsstudios.com',
-    ubicacion: 'Colombia',
-    web: 'www.daatcsstudios.com'
+    telefono: '+50242181782', // Actualizar con número real
+    email: 'daatcsstudios@gmail.com',
+    ubicacion: 'Guatemala',
+    web: 'https://jr23cr.github.io/daatcsstudio.github.io/'
   },
 
   // Números de administradores de DAATCS (sin +, solo números)
   admins: [
-    '573123456789', // Reemplaza con tu número
-    '573987654321'  // Agrega más admins aquí
+    '50242181782', // Reemplaza con tu número
+    '50255813076',
+    '50232682854'  // Agrega más admins aquí
   ],
   
   // Configuración del bot
