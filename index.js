@@ -10,8 +10,8 @@ const EMPRESA_INFO = {
   tipo: 'Sublimaciones y Estampados',
   grupoAutorizado: 'PEDIDOS DAATCS',
   grupoId: null,
-  telefono: '+57 XXX XXX XXXX',
-  ubicacion: 'Colombia'
+  telefono: '+502 4218 1782',
+  ubicacion: 'Guatemala'
 };
 
 // Sistema de base de datos simple para pedidos
@@ -144,9 +144,9 @@ _Bot exclusivo para grupo PEDIDOS DAATCS_`;
 🎨 *Especialistas en Sublimaciones*
 
 📱 *WhatsApp:* ${EMPRESA_INFO.telefono}
-📧 *Email:* info@daatcsstudios.com
+📧 *Email:* daatcsstidoos@gmail.com
 📍 *Ubicación:* ${EMPRESA_INFO.ubicacion}
-🌐 *Web:* www.daatcsstudios.com
+🌐 *Web:* https://jr23cr.github.io/daatcsstudio.github.io/
 
 ⏰ *Horarios de Atención:*
 • Lunes a Viernes: 8:00 AM - 6:00 PM
@@ -500,7 +500,7 @@ function obtenerTiempoProduccion(categoria) {
 
 // Función para verificar si es admin
 function esAdmin(sender) {
-  const admins = ['573123456789', '573987654321']; // Reemplazar con números reales de DAATCS
+  const admins = ['50242181782', '50255813076', '50232682854']; // Reemplazar con números reales de DAATCS
   return admins.includes(sender.replace('@s.whatsapp.net', ''));
 }
 
