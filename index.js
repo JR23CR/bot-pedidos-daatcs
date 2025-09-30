@@ -104,30 +104,22 @@ const comandos = {
 
 📋 *COMANDOS DISPONIBLES:*
 
-*🎯 PRODUCTOS DE SUBLIMACIÓN:*
-• .productos - Ver catálogo completo
-• .buscar [término] - Buscar productos específicos
-• .oferta - Ver productos en oferta
+*ℹ️ INFORMACIÓN GENERAL:*
+• .productos - Ver catálogo completo de sublimación.
+• .contacto - Ver información de contacto de DAATCS.
+• .materiales - Conocer los materiales que utilizamos.
+• .tiempos - Consultar tiempos de entrega estimados.
 
-*🛍️ REALIZAR PEDIDOS:*
-• .registrarme [nombre] [teléfono] [dirección]
-• .nuevopedido - Crear nuevo pedido
-• .agregar [id_producto] [cantidad] [detalles]
-• .mispedidos - Ver mis pedidos activos
-• .pedido [id] - Ver detalles específicos
-• .confirmar [id] - Confirmar mi pedido
+*🛒 GESTIÓN DE PEDIDOS:*
+• .registrarme [nombre] [teléfono] [dirección] - Crea tu perfil de cliente.
+• .nuevopedido - Inicia un nuevo pedido.
+• .agregaralcarrito [id_pedido] [id_producto] [cantidad] - Agrega un producto a tu pedido.
+• .mispedidos - Revisa el historial de tus pedidos.
+• .pedido [id_pedido] - Ve el detalle de un pedido específico.
+• .confirmarpedido [id_pedido] - Confirma un pedido para que entre a producción.
 
-*📞 INFORMACIÓN:*
-• .contacto - Datos de contacto
-• .tiempos - Tiempos de entrega
-• .materiales - Tipos de materiales
-• .precios - Lista de precios
-
-*👨‍💼 ADMINISTRACIÓN:*
-• .agregarproducto - Agregar nuevo producto
-• .todospedidos - Ver todos los pedidos
-• .estadisticas - Reportes de ventas
-• .configurar - Configurar bot
+*👨‍💼 ADMINISTRACIÓN (Solo Admins):*
+• .agregarproducto [nombre] [precio] [descripción] - Agrega un nuevo producto al catálogo.
 
 💫 *DAATCS STUDIOS* - Sublimaciones de alta calidad
 📍 ${EMPRESA_INFO.ubicacion}
