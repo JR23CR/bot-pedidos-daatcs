@@ -566,9 +566,7 @@ async function startBot() {
             return;
           }
         } else {
-          sock.sendMessage(from, {
-            text: `🎨 *DAATCS STUDIOS* 🎨\n\n❌ Este bot solo funciona en el grupo:\n*"PEDIDOS DAATCS"*\n\n📱 Únete al grupo para realizar tus pedidos de sublimación.\n\n💫 ¡Esperamos atenderte pronto!`
-          });
+          // No responder a mensajes privados para evitar confusiones.
           return;
         }
       }
